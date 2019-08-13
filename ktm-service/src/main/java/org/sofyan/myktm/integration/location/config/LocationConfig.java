@@ -8,6 +8,7 @@ public class LocationConfig {
     private String serviceEndpoint;
     private String jsonPathFindName;
     private String jsonPathCheckRespons;
+    private String jsonPathFindErrorMessage;
     private String locationServiceImpl;
     private LocationConfigParam configParam;
 
@@ -33,6 +34,14 @@ public class LocationConfig {
 
     public void setServiceType(LocationServiceTypeConstant serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public String getJsonPathFindErrorMessage() {
+        return jsonPathFindErrorMessage;
+    }
+
+    public void setJsonPathFindErrorMessage(String jsonPathFindErrorMessage) {
+        this.jsonPathFindErrorMessage = jsonPathFindErrorMessage;
     }
 
     public String getServiceEndpoint() {

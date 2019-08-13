@@ -2,13 +2,13 @@ package org.sofyan.myktm.ktmservice.service.impl;
 
 import org.sofyan.myktm.constant.MessageConstant;
 import org.sofyan.myktm.constant.ParamConstant;
-import org.sofyan.myktm.ktmservice.service.ExecutorService;
 import org.sofyan.myktm.integration.location.config.LocationConfiguration;
 import org.sofyan.myktm.integration.location.constant.LocationServiceTypeConstant;
 import org.sofyan.myktm.integration.location.service.LocationExecutorService;
 import org.sofyan.myktm.integration.location.vo.request.PositionVo;
 import org.sofyan.myktm.ktmservice.config.KtmServiceConfiguration;
 import org.sofyan.myktm.ktmservice.constant.KtmServiceType;
+import org.sofyan.myktm.ktmservice.service.ExecutorService;
 import org.sofyan.myktm.ktmservice.service.KtmService;
 import org.sofyan.myktm.vo.MessageResponse;
 import org.springframework.stereotype.Service;

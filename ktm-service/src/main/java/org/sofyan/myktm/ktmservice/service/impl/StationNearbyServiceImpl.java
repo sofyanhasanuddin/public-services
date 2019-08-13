@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import org.sofyan.myktm.constant.JsonPathConstant;
 import org.sofyan.myktm.constant.MessageConstant;
 import org.sofyan.myktm.constant.ParamConstant;
 import org.sofyan.myktm.integration.firebase.constant.FirebaseEndpointConstant;
@@ -17,11 +18,12 @@ import org.sofyan.myktm.util.ParameterUtil;
 import org.sofyan.myktm.util.SpringUtil;
 import org.sofyan.myktm.vo.KtmNearbyStationResponse;
 import org.sofyan.myktm.vo.MessageResponse;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class StationNearbyServiceImpl implements ExecutorService {
 
@@ -30,14 +32,14 @@ public class StationNearbyServiceImpl implements ExecutorService {
 
         List<KtmNearbyStationResponse> listSchedule = new ArrayList<>();
 
-        Date currDate = new Date();
+        String currTime = ParameterUtil.getParamValue(param,ParamConstant.TIME,String.class);
 
         LocationConfig locationConfig = ParameterUtil.getParamValue(param,ParamConstant.LOCATION_SERVICE_CONFIG,LocationConfig.class);
 
         String jsonLocationResp = ParameterUtil.getParamValue(param,ParamConstant.JSON_LOCATION_RESPOND, String.class);
 
-        if(!StringUtils.hasText( JsonPath.parse( jsonLocationResp ).read(locationConfig.getJsonPathCheckRespons()).toString() ) )
-            return MessageResponse.error("Response from location is empty");
+        if( JsonPath.parse( jsonLocationResp ).read(locationConfig.getJsonPathCheckRespons()).toString().equals(JsonPathConstant.EMPTY_RESULT ) )
+            return MessageResponse.error(JsonPath.parse( jsonLocationResp ).read(locationConfig.getJsonPathFindErrorMessage()).toString());
 
         String nearByStationName = JsonPath.parse( jsonLocationResp ).read(locationConfig.getJsonPathFindName() ).toString();
 
@@ -57,7 +59,7 @@ public class StationNearbyServiceImpl implements ExecutorService {
                     if( FuzzySearch.partialRatio( name.toLowerCase(), nearByStationName.toLowerCase() ) >= 90) {
 
                         for(Schedule sch : station.getListSchedule()) {
-                            if( nearestTime(sch, currDate) ) {
+                            if( nearestTime(sch, currTime) ) {
 
                                 listSchedule.add(new KtmNearbyStationResponse(ktmSchedule.getRoute(),
                                         station.getName(), sch.getTime()));
@@ -85,20 +87,9 @@ public class StationNearbyServiceImpl implements ExecutorService {
 
     }
 
-    private boolean nearestTime(Schedule sch, Date currDate) {
+    private boolean nearestTime(Schedule sch, String currTime) {
 
-        Calendar currCal = Calendar.getInstance();
-        currCal.setTime(currDate);
-
-        //For current time
-        StringBuilder sbCurrTime = new StringBuilder();
-        sbCurrTime.append(currCal.get(Calendar.HOUR_OF_DAY) > 9 ?
-                currCal.get(Calendar.HOUR_OF_DAY) : "0" + currCal.get(Calendar.HOUR_OF_DAY));
-        sbCurrTime.append(":");
-        sbCurrTime.append(currCal.get(Calendar.MINUTE) > 9 ?
-                currCal.get(Calendar.MINUTE) : "0" + currCal.get(Calendar.MINUTE));
-
-        LocalTime localCurrTime = LocalTime.parse(sbCurrTime.toString());
+        LocalTime localCurrTime = LocalTime.parse(currTime);
         LocalTime localStationTime = LocalTime.parse(sch.getTime());
 
         return localStationTime.isAfter(localCurrTime);

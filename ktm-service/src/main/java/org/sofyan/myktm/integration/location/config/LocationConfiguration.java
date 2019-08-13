@@ -23,6 +23,7 @@ public class LocationConfiguration {
                 .with(LocationConfig::setServiceEndpoint,"stations/by_geocoord.json")
                 .with(LocationConfig::setJsonPathCheckRespons,"$.Res[?(@.Stations)]")
                 .with(LocationConfig::setJsonPathFindName,"$.Res.Stations.Stn[0].name")
+                .with(LocationConfig::setJsonPathFindErrorMessage,"$.Res.Message.text")
                 .with(LocationConfig::setLocationServiceImpl,LocationGetNearestStationServiceImpl.class.getName())
                 .with(LocationConfig::setConfigParam, new LocationConfigParam() {
                     @Override

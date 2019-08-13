@@ -50,7 +50,7 @@ public class LocationIntegrationTest {
 
         PositionVo p = new PositionVo();
         p.setLongitude("3.0861");
-        p.setLatitude("101.6338");
+        p.setLatitude("401.6338");
 
         String pathToSearch = "$.Res[?(@.Stations)]";
 
