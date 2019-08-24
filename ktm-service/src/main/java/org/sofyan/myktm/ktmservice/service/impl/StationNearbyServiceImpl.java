@@ -62,7 +62,7 @@ public class StationNearbyServiceImpl implements ExecutorService {
                             if( nearestTime(sch, currTime) ) {
 
                                 listSchedule.add(new KtmNearbyStationResponse(ktmSchedule.getRoute(),
-                                        station.getName(), sch.getTime()));
+                                        station.getName(), sch.getTime(), station.getListSchedule()));
 
                                 foundStationAndTime = true;
                                 break;
@@ -81,6 +81,7 @@ public class StationNearbyServiceImpl implements ExecutorService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return MessageResponse.error(MessageConstant.INTERNAL_SERVER_ERROR);
         }
 
         return MessageResponse.error(MessageConstant.NO_DATA_FOUND);

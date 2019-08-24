@@ -22,7 +22,7 @@ public class MainCtrlTest {
     @Test
     public void findNearestKtmStationTest() throws Exception {
 
-        String content = mvc.perform(get("/api/find-ktm-nearest-station/3.0860/101.6619"))
+        String content = mvc.perform(get("/api/find-ktm-nearest-station/3.0860/101.6619/18:00"))
                 .andExpect(status().isOk())
                 //.andDo(MockMvcResultHandlers.print())
                 .andReturn().getResponse().getContentAsString();

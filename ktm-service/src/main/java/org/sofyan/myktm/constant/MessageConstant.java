@@ -10,4 +10,6 @@ public class MessageConstant {
     public static String FOUND_STATION = "Found station";
     public static String FOUND_ROUTE = "Found route";
 
+    public static String INTERNAL_SERVER_ERROR = "Internal Server Exception";
+
 }
